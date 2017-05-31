@@ -53,10 +53,7 @@ public class NewBlogFragment extends AbstractFragment implements TextWatcher {
     private ArrayAdapter<String> mSiteUrlSuggestionAdapter;
     private WPTextView mSignupButton;
     private WPTextView mProgressTextSignIn;
-    private WPTextView mCancelButton;
     private RelativeLayout mProgressBarSignIn;
-
-    private boolean mSignoutOnCancelMode;
 
     private long mNewSiteRemoteId;
 
@@ -95,29 +92,8 @@ public class NewBlogFragment extends AbstractFragment implements TextWatcher {
         checkIfFieldsFilled();
     }
 
-    public void setSignoutOnCancelMode(boolean mode) {
-        mSignoutOnCancelMode = mode;
-        mCancelButton.setVisibility(View.VISIBLE);
-    }
-
-    public boolean isSignoutOnCancelMode() {
-        return mSignoutOnCancelMode;
-    }
-
-    public void onBackPressed() {
-        signoutAndFinish();
-    }
-
     protected void onDoneAction() {
         validateAndCreateUserAndBlog();
-    }
-
-    private void signoutAndFinish() {
-        if (mSignoutOnCancelMode) {
-            ((WordPress) getActivity().getApplication()).wordPressComSignOut();
-            getActivity().setResult(Activity.RESULT_CANCELED);
-            getActivity().finish();
-        }
     }
 
     private boolean fieldsFilled() {
@@ -229,9 +205,6 @@ public class NewBlogFragment extends AbstractFragment implements TextWatcher {
         mSignupButton.setOnClickListener(mSignupClickListener);
         mSignupButton.setEnabled(false);
 
-        mCancelButton = (WPTextView) rootView.findViewById(R.id.cancel_button);
-        mCancelButton.setOnClickListener(mCancelClickListener);
-
         mProgressTextSignIn = (WPTextView) rootView.findViewById(R.id.nux_sign_in_progress_text);
         mProgressBarSignIn = (RelativeLayout) rootView.findViewById(R.id.nux_sign_in_progress_bar);
 
@@ -289,13 +262,6 @@ public class NewBlogFragment extends AbstractFragment implements TextWatcher {
         @Override
         public void onClick(View v) {
             validateAndCreateUserAndBlog();
-        }
-    };
-
-    private final OnClickListener mCancelClickListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            signoutAndFinish();
         }
     };
 

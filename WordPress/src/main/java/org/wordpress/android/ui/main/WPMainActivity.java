@@ -44,6 +44,7 @@ import org.wordpress.android.push.NotificationsProcessingService;
 import org.wordpress.android.ui.ActivityId;
 import org.wordpress.android.ui.ActivityLauncher;
 import org.wordpress.android.ui.RequestCodes;
+import org.wordpress.android.ui.accounts.LoginActivity;
 import org.wordpress.android.ui.accounts.SignInActivity;
 import org.wordpress.android.ui.notifications.NotificationEvents;
 import org.wordpress.android.ui.notifications.NotificationsListFragment;
@@ -231,7 +232,14 @@ public class WPMainActivity extends AppCompatActivity {
                     if (mTabAdapter.isValidPosition(position) && position != mViewPager.getCurrentItem()) {
                         mViewPager.setCurrentItem(position);
                     }
-                    checkMagicLinkSignIn();
+
+                    if (AppPrefs.isLoginWizardStyleActivated()) {
+                        if (!mAccountStore.hasAccessToken() && LoginActivity.hasMagicLinkLoginIntent(getIntent())) {
+                            ActivityLauncher.forwardLoginForResult(this, getIntent());
+                        }
+                    } else {
+                        checkMagicLinkSignIn();
+                    }
                 }
             } else {
                 if (AppPrefs.isLoginWizardStyleActivated()) {

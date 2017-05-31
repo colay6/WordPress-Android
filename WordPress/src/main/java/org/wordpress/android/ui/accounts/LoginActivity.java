@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         setContentView(R.layout.login_activity);
 
         if (savedInstanceState == null) {
-            if (hasMagicLinkLoginIntent()) {
+            if (hasMagicLinkLoginIntent(getIntent())) {
                 addMagicLinkLoginAttemptFragment();
             } else {
                 addLoginPrologueFragment();
@@ -73,9 +73,9 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         return false;
     }
 
-    private boolean hasMagicLinkLoginIntent() {
-        String action = getIntent().getAction();
-        Uri uri = getIntent().getData();
+    public static boolean hasMagicLinkLoginIntent(Intent intent) {
+        String action = intent.getAction();
+        Uri uri = intent.getData();
 
         return Intent.ACTION_VIEW.equals(action) && uri != null && uri.getHost().contains(MAGIC_LOGIN);
     }
